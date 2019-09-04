@@ -5,7 +5,8 @@ clear
 
 use "C:\Users\elisa\Documents\Binghamton University\Fall 2019\ECON 634\PS1\rscfp2007.dta" 
 
-/*deflating the numbers since the summary statistics have the value of dollars in 2016
+/*
+deflating the numbers since the summary statistics have the value of dollars in 2016
 
  since I am using the summarize version, and it is adjusted to be in 2016 value, I adjusted
  I follow the SAS code given in the page to https://www.federalreserve.gov/econres/files/bulletin.macro.txt
@@ -23,9 +24,6 @@ use "C:\Users\elisa\Documents\Binghamton University\Fall 2019\ECON 634\PS1\rscfp
 	Then  3547/3063=1.158015018 
 	
 	*/
-	
-
-	
 	
 g d7_wageinc=wageinc/(1.158015018)
 g d7_bussefarminc=bussefarminc/(1.158015018)

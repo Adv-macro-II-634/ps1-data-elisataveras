@@ -31,6 +31,8 @@
 \newcommand\tab[1][1cm]{\hspace*{#1}}
 \DeclareMathOperator*{\Max}{Max}
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\def\dotfill#1{\cleaders\hbox to #1{.}\hfill}
+\newcommand\dotline[2][.5em]{\leavevmode\hbox to #2{\dotfill{#1}\hfil}}
 %\usepackage[backend=biber,style=alphabetic,sorting=ynt]{biblatex}
 %\addbibresource{bibliocopulas.bib}
 \usepackage[round,sort,comma,authoryear]{natbib}
@@ -134,18 +136,18 @@ Demography, June 2017, v. 54, iss. 3, pp. 985-1005
 	
 	
 	\begin {table}[H]
+	\footnotesize
 	\begin{center}
 			\caption {Replication of Table 1 of DGR (2011)}
 			\label{tab:Table1}
 			{
-				\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-				\begin{tabular}{l*{12}{c}}
+				\begin{tabular}{l*{12}{l}}
 					\hline
-					Quantiles&   0&1&5&10&20&40&60&80&90&95&99&100\\
+					Quantiles&  0&1&5&10&20&40&60&80&90&95&99&100\\
 					\hline
-					Earnings &-1,546.5 & 0&0 & 0&0&25.71&50.5&87.5& 126.1& 180.2&497&161521.5\\
-					Income   &-505.8  & 4.2 & 8.92& 12.34& 20.06&36.30& 58.82&98.72&141.98&207.21&680.68&187,200.5   \\
-					Wealth   & -473.7 &-31.26 & -4.6&.03 & 7.33&64.91&197.9&496.9&910.3&1900.17&8374.54&   1,411,730   \\
+					Earnings &-1,546.5 & 0&0 & 0&0&25.7&50.5&87.5& 126.1& 180.2&497&161,521.5\\
+					Income   &-505.8  & 4.2 & 8.92& 12.34& 20.1&36.3& 58.8&98.72&141.98&207.21&680.68&187,200.5   \\
+					Wealth   & -473.7 &-31.26 & -4.6&.03 & 7.33&64.9&197.9&496.9&910.3&1,900.17&8,374.5&   1,411,730 \\
 					\hline
 				\end{tabular}
 			}	
@@ -153,6 +155,31 @@ Demography, June 2017, v. 54, iss. 3, pp. 985-1005
 	\end{center} 
 	\end {table}
 
+\normalfont
+
+	\begin {table}[H]
+\footnotesize
+\begin{center}
+	\caption {Replication of Table 2 of DGR (2011)}
+	\label{tab:Table2}
+	{
+		\begin{tabular}{l*{3}{c}}
+			\hline
+			&  Earnings&Income&Wealth\\
+			\hline
+			Coefficient of Variation &  3.61 &   4.32 &  6.01\\
+			Variance of the logs  &1.288 & .992 4.532	 \\
+			Gini index &&&\\
+			Top 1 \% /  Top 40\%&&&\\
+			\multicolumn{4}{l}{\dotline[2pt]{10cm}} \\
+			Location of the mean (\%) &&&\\
+			Mean/Median & 1.724 &	1.767 & 4.601\\
+			\hline
+		\end{tabular}
+	}	
+	
+\end{center} 
+\end {table}
 	
 	\vspace{3mm}
 	

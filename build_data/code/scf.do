@@ -78,11 +78,10 @@ _pctile wealth [aw=wgt], p(1 5 10 20 40 60 80 90 95 99)
 ************************************  TABLE 2 ******************************************************************
 
 
-**** MEAN/Median and CV 
+**** 1. MEAN/MEDIAN AND CV
 tabstat earning inc wealth [aw=wgt], stats(cv mean median)
 
-
-***variance of the log
+**** 2. VARIANCE OF THE LOG OF VARIABLES 
 
 g ln_earning=ln(earning)
 g ln_inc=ln(inc)
@@ -96,7 +95,7 @@ g ln_wealth=ln(wealth)
 tabstat ln_earning ln_inc ln_wealth [aw=wgt], stats(var)
 
   
-*** LOCATION OF THE MEAN IN THE DISTRIBUTION
+*** 3. LOCATION OF THE MEAN IN THE DISTRIBUTION
 
 *** 1. get the value of the variables at each percentile
 pctile pctile_ear =  earning [aw=wgt],  nq(100) 
@@ -113,61 +112,124 @@ su pcE pcI pcW
 
 *** GINI INDEX
 
+*** I DID THIS IN R BECAUSE STATA DOES NOT CALCULATE CORRECTLY THE NUMBERS
+
 
 *** TOP 1% / LOWEST 40%
 
-** generate weighted values
+** 1. generate weighted values of the variables 
 
 g earning_wt=earning*wgt
 g inc_wt=inc*wgt
 g wealth_wt=wealth*wgt
 
-*** GENERATE THE PERCENTILE THAT PEOPLE ARE IN
-pctile xtE=earning [aw=wgt], nq(100) 
-pctile xtI=inc [aw=wgt],  nq(100)
-pctile xtW=wealth [aw=wgt],  nq(100)
 
- list xtE  xtI xtW in 40
- list xtE xtI  xtW in 99
+** 2. calculate total weights 
+ egen totalwgt=total(wgt)
  
- ***  40. | 25.70898   36.30108   64.915 
- ***  99. | 496.9855   680.6813   8374.54 
-  
 
+ ** 3. order the weights and sum over the values to cumulatives  and group people between top 1 and bottom 1 
  
- g dE=.
- replace dE=1 if earning<=25.70898
-  replace dE=2 if earning>=496.9855
-  
-   g dI=.
- replace dI=1 if earning<=36.30108  
-  replace dI=2 if earning>=680.6813
-  
-     g dW=.
- replace dW=1 if earning< =64.915 
-  replace dW=2 if earning>=8374.54 
-  
+ ** earning 
+gsort - earning 
+ gen cumwgt = sum(wgt)
+
+ g groupE=.
+ replace groupE=1 if cumwgt<=totalwgt*0.01
  
- egen cmsumE=total(earning_wt), by (dE)
- egen cmsumI=total(inc_wt), by (dI)
-  egen cmsumW=total(wealth_wt), by (dW)
+ drop cumwgt
+ sort earning 
+ gen cumwgt = sum(wgt)
+ 
+replace groupE=2 if cumwgt<=totalwgt*0.4
   
-   egen cmsumE_wgt=total(wgt), by (dE)
- egen cmsumI_wgt=total(wgt), by (dI)
-  egen cmsumW_wgt=total(wgt), by (dW)
   
-  g weighcmsumE=cmsumE/cmsumE_wgt
-  g weighcmsumI=cmsumI/cmsumI_wgt
-  g weighcmsumW=cmsumW/cmsumW_wgt
-  
-  tab weighcmsumE dE
-  tab weighcmsumI dI
-  tab weighcmsumW dW
+   ** income 
+   
+  drop cumwgt
+gsort - inc 
+ gen cumwgt = sum(wgt)
+
+ g groupI=.
+ replace groupI=1 if cumwgt<=totalwgt*0.01
+ 
+ drop cumwgt
+ sort inc 
+ gen cumwgt = sum(wgt)
+ 
+replace groupI=2 if cumwgt<=totalwgt*0.4
 
 
-*****gini index
+  
+  
+   ** wealth 
+   
+  drop cumwgt
+gsort - wealth 
+ gen cumwgt = sum(wgt)
 
-*** I did this in R
+ g groupW=.
+ replace groupW=1 if cumwgt<=totalwgt*0.01
+ 
+ drop cumwgt
+ sort wealth 
+ gen cumwgt = sum(wgt)
+ 
+replace groupW=2 if cumwgt<=totalwgt*0.4
+  
+  
+  
+  
+  *** doing the ratio total symation 
+ 
+egen cmsumE=total(earning_wt), by (groupE)
+egen cmsumI=total(inc_wt), by (groupI)
+egen cmsumW=total(wealth_wt), by (groupW)
+  
+ egen cmsumE_wgt=total(wgt), by (groupE)
+egen cmsumI_wgt=total(wgt), by (groupI)
+egen cmsumW_wgt=total(wgt), by (groupW)
+  
+g weighcmsumE=cmsumE/cmsumE_wgt
+g weighcmsumI=cmsumI/cmsumI_wgt
+g weighcmsumW=cmsumW/cmsumW_wgt
+  
+tab weighcmsumE groupE
+tab weighcmsumI groupI
+tab weighcmsumW groupW
+   
+   
+egen  g1E= max(weighcmsumE) if groupE==1
+egen  g40E= max(weighcmsumE) if groupE==2
+
+egen  top1E= max(g1E) 
+egen  Bottom40E= max(g40E) 
+
+g  ratioE=top1E/Bottom40E
+
+
+egen  g1I= max(weighcmsumI) if groupI==1
+egen  g40I= max(weighcmsumI) if groupI==2
+
+egen  top1I= max(g1I) 
+egen  Bottom40I= max(g40I) 
+
+g  ratioI=top1I/Bottom40I
+
+
+egen  g1W= max(weighcmsumW) if groupW==1
+egen  g40W= max(weighcmsumW) if groupW==2
+
+egen  top1W= max(g1W) 
+egen  Bottom40W= max(g40W) 
+
+g  ratioW=top1W/Bottom40W
+
+tab ratioE 
+tab ratioI
+tab ratioW
+
+
 
  
 ************************************  LORENZ CURVE ******************************************************************

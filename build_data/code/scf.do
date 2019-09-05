@@ -57,135 +57,29 @@ save "C:\Users\elisa\Documents\GitHub\ps1-data-elisataveras\build_data\output\dt
 **** firt get the summarize which give me the minimum, the max
 * earnings
  
-summarize earning [aweight = wgt], detail 
-_pctile earning [aweight=wgt], p(1 5 10 20 40 60 80 90 95 99)
+summarize earning [aw = wgt], detail 
+_pctile earning [aw=wgt], p(1 5 10 20 40 60 80 90 95 99)
  return list
  
  * income
- summarize inc [aweight = wgt], detail 
-_pctile inc [aweight=wgt], p(1 5 10 20 40 60 80 90 95 99)
+ summarize inc [aw = wgt], detail 
+_pctile inc [aw=wgt], p(1 5 10 20 40 60 80 90 95 99)
  return list
  
   * networth/ wealth
- summarize wealth [aweight = wgt], detail 
-_pctile wealth [aweight=wgt], p(1 5 10 20 40 60 80 90 95 99)
+ summarize wealth [aw = wgt], detail 
+_pctile wealth [aw=wgt], p(1 5 10 20 40 60 80 90 95 99)
  return list
  
  
- /*
- 
- . summarize earning [aweight = wgt], detail 
 
-                           earning
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%            0      -1546.498
- 5%            0      -1546.498
-10%            0      -1546.498       Obs              22,085
-25%     6.787171      -1546.498       Sum of Wgt.   116107641
 
-50%     37.02094                      Mean           63.82301
-                        Largest       Std. Dev.      230.0835
-75%     75.07023       161520.5
-90%     126.0655       161520.5       Variance       52938.43
-95%     180.1572       161520.5       Skewness       162.4619
-99%     496.9855       161521.5       Kurtosis       69660.26
-
-. _pctile earning [aweight=wgt], p(1 5 10 20 40 60 80 90 95 99)
-
-.  return list
-
-scalars:
-                 r(r1) =  0
-                 r(r2) =  0
-                 r(r3) =  0
-                 r(r4) =  0
-                 r(r5) =  25.70898056030273
-                 r(r6) =  50.38960266113281
-                 r(r7) =  87.47819519042969
-                 r(r8) =  126.0655288696289
-                 r(r9) =  180.1572265625
-                r(r10) =  496.9854736328125
-
-.  
-.  * income
-.  summarize inc [aweight = wgt], detail 
-
-                             inc
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     4.216273      -505.7471
- 5%     8.926158      -504.9244
-10%     12.34031      -503.6904       Obs              22,085
-25%     23.85793      -503.3818       Sum of Wgt.   116107641
-
-50%     47.30452                      Mean           83.58943
-                        Largest       Std. Dev.      360.8683
-75%     85.55949       187197.4
-90%     141.9856       187197.4       Variance         130226
-95%     207.2144       187198.4       Skewness       130.7656
-99%     680.6813       187200.5       Kurtosis       36101.41
-
-. _pctile inc [aweight=wgt], p(1 5 10 20 40 60 80 90 95 99)
-
-.  return list
-
-scalars:
-                 r(r1) =  4.216272830963135
-                 r(r2) =  8.926157951354981
-                 r(r3) =  12.34031009674072
-                 r(r4) =  20.06328964233398
-                 r(r5) =  36.30108261108398
-                 r(r6) =  58.82214736938477
-                 r(r7) =  98.72248077392578
-                 r(r8) =  141.9855651855469
-                 r(r9) =  207.2143859863281
-                r(r10) =  680.6812744140625
-
-.  
-.   * networth/ wealth
-.  summarize wealth [aweight = wgt], detail 
-
-                           wealth
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%       -31.26         -473.7
- 5%         -4.6         -426.4
-10%          .03         -410.6       Obs              22,085
-25%        14.15           -391       Sum of Wgt.   116107641
-
-50%          121                      Mean           556.8022
-                        Largest       Std. Dev.      3345.963
-75%       372.75        1199640
-90%        910.3        1393275       Variance       1.12e+07
-95%      1900.17        1409656       Skewness       66.69465
-99%      8374.54        1411730       Kurtosis       9607.335
-
-. _pctile wealth [aweight=wgt], p(1 5 10 20 40 60 80 90 95 99)
-
-.  return list
-
-scalars:
-                 r(r1) =  -31.26000022888184
-                 r(r2) =  -4.599999904632568
-                 r(r3) =  .0299999993294477
-                 r(r4) =  7.329999923706055
-                 r(r5) =  64.91500091552734
-                 r(r6) =  197.8999938964844
-                 r(r7) =  496.8999938964844
-                 r(r8) =  910.2999877929688
-                 r(r9) =  1900.170043945313
-                r(r10) =  8374.5400390625
-
- 
- 
- */
  
 ************************************  TABLE 2 ******************************************************************
 
 
 **** MEAN/Median and CV 
-tabstat earning inc wealth [aweight=wgt], stats(cv mean median)
+tabstat earning inc wealth [aw=wgt], stats(cv mean median)
 
 
 ***variance of the log
@@ -194,20 +88,20 @@ g ln_earning=ln(earning)
 g ln_inc=ln(inc)
 g ln_wealth=ln(wealth)
 
- pctile EARNING_PC2=earning [aweight=wgt],nq(100) genp(earnpct2)
- tabstat earning[aweight=wgt], statistics(mean cv median p99) column(statistics)
+ pctile EARNING_PC2=earning [aw=wgt],nq(100) genp(earnpct2)
+ tabstat earning[aw=wgt], statistics(mean cv median p99) column(statistics)
  list EARNING_PC2 earnpct2 in 40/99
   
   
-tabstat ln_earning ln_inc ln_wealth [aweight=wgt], stats(var)
+tabstat ln_earning ln_inc ln_wealth [aw=wgt], stats(var)
 
   
 *** LOCATION OF THE MEAN IN THE DISTRIBUTION
 
 *** 1. get the value of the variables at each percentile
-pctile pctile_ear =  earning [aweight=wgt],  nq(100) 
-pctile pctile_inc = inc  [aweight=wgt],  nq(100) 
-pctile pctile_wea = wealth [aweight=wgt],  nq(100)
+pctile pctile_ear =  earning [aw=wgt],  nq(100) 
+pctile pctile_inc = inc  [aw=wgt],  nq(100) 
+pctile pctile_wea = wealth [aw=wgt],  nq(100)
 
 ** 2. get the proportion that are just bellow the mean
 
@@ -229,9 +123,9 @@ g inc_wt=inc*wgt
 g wealth_wt=wealth*wgt
 
 *** GENERATE THE PERCENTILE THAT PEOPLE ARE IN
-pctile xtE=earning [aweight=wgt], nq(100) 
-pctile xtI=inc [aweight=wgt],  nq(100)
-pctile xtW=wealth [aweight=wgt],  nq(100)
+pctile xtE=earning [aw=wgt], nq(100) 
+pctile xtI=inc [aw=wgt],  nq(100)
+pctile xtW=wealth [aw=wgt],  nq(100)
 
  list xtE  xtI xtW in 40
  list xtE xtI  xtW in 99
@@ -275,12 +169,35 @@ pctile xtW=wealth [aweight=wgt],  nq(100)
 
 *** I did this in R
 
-
-****Lorenz curve
-
-
+ 
+************************************  LORENZ CURVE ******************************************************************
 
 
+glcurve earning [aw=wgt], gl(lE) p(EqE) lorenz nograph
+glcurve inc [aw=wgt], gl(lI) p(EqI) lorenz nograph
+glcurve wealth [aw=wgt], gl(lW) p(EqW) lorenz nograph
+
+
+graph twoway ///
+line EqE EqE, legend( label( 1 "Lorenz Curve") label( 2 "Line of Equality" ) ) 
+
+graph twoway ///
+line lE EqE , sort  graphregion(color(white)) bgcolor(white) ytitle("Cumulative Share of Earnings")   xtitle("Cumulative Share of People from Lowest to Highest Earning")title("Graphical Representation of Gini Coefficient for Earning") subtitle("U.S., 2007") note("Source: SCF 2007")  || ///
+line EqE EqE, legend( label( 1 "Lorenz Curve") label( 2 "Line of Equality" ) ) 
+graph export "C:\Users\elisa\Documents\GitHub\ps1-data-elisataveras\build_data\output\Lorenz_earning.png", as(png) replace
+
+
+
+graph twoway ///
+line lI EqI , sort  graphregion(color(white)) bgcolor(white) ytitle("Cumulative Share of Income")   xtitle("Cumulative Share of People from Lowest to Highest Income")title("Graphical Representation of Gini Coefficient for Income") subtitle("U.S., 2007") note("Source: SCF 2007")  || ///
+line EqI EqI, legend( label( 1 "Lorenz Curve") label( 2 "Line of Equality" ) ) 
+graph export "C:\Users\elisa\Documents\GitHub\ps1-data-elisataveras\build_data\output\Lorenz_income.png", as(png) replace
+
+
+graph twoway ///
+line lW EqW , sort  graphregion(color(white)) bgcolor(white) ytitle("Cumulative Share of Wealth")   xtitle("Cumulative Share of People from Lowest to Highest Wealth")title("Graphical Representation of Gini Coefficient for Wealth") subtitle("U.S., 2007") note("Source: SCF 2007")  || ///
+line EqW EqW, legend( label( 1 "Lorenz Curve") label( 2 "Line of Equality" ) ) 
+graph export "C:\Users\elisa\Documents\GitHub\ps1-data-elisataveras\build_data\output\Lorenz_wealth.png", as(png) replace
 
 
  
